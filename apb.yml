@@ -21,3 +21,14 @@ plans:
     free: True
     metadata: {}
     parameters: []
+    bind_parameters:
+      - name: action_id
+        title: The name of the OpenWhisk action_id
+        type: string
+        default: ''
+        required: True
+      - name: action
+        title: Define the action
+        type: string
+        display_type: textarea
+        required: True

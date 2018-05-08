@@ -1,0 +1,6 @@
+---
+
+- name: Copy wsk binary to remote
+  copy: wsk
+  dest: /tmp/wsk
+  mode: 777
