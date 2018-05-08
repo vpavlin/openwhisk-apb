@@ -28,7 +28,13 @@ plans:
         default: ''
         required: True
       - name: action
-        title: Define the action
+        title: Define the action in JavaScript (Node.js 6 Runtime)
         type: string
         display_type: textarea
+        default: ''
+        required: True
+      - name: client_id
+        title: Mobile Client Identifier
+        type: string
+        default: ''
         required: True

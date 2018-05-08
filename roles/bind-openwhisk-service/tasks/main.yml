@@ -1,6 +1,48 @@
 ---
 
+- name: Register OpenWhisk route
+  command: oc get route openwhisk -o jsonpath='{.spec.host}' -n {{ namespace }}
+  register: openwhisk_uri
+
+- name: Register OpenWhisk Auth Secret
+  command: oc get secret whisk.auth -o jsonpath='{.data.system}' -n {{ namespace }}
+  register: encoded_openwhisk_system_pass
+
 - name: Copy wsk binary to remote
-  copy: wsk
-  dest: /tmp/wsk
-  mode: 777
+  copy:
+    src: wsk
+    dest: /tmp/wsk
+    mode: u+rwx,g+rwx,o+rwx
+
+- name: Create action file
+  copy:
+    content: "{{ action }}"
+    dest: /tmp/{{ action_id }}.js
+    mode: u+rwx,g+rwx,o+rwx
+
+- name: Create OpenWhisk action {{ action_id }}
+  command: >
+    /tmp/wsk action create {{ action_id }}
+    /tmp/{{ action_id }}.js
+    --kind nodejs:6
+    --auth {{ encoded_openwhisk_system_pass.stdout | b64decode }}
+    --apihost {{ openwhisk_uri.stdout }}
+    --insecure
+
+##############################################################################
+## Creates an OpenShift Secret template file from a Jinja2 template
+##############################################################################
+- name: Create Openshift template from template
+  template:
+    src: bind-secret-template.j2
+    dest: /tmp/bind-secret-template.yml
+
+- name: Create Bind Secret
+  command: oc create -f /tmp/bind-secret-template.yml -n {{ namespace }}
+
+- name: Encode required Bind data
+  asb_encode_binding:
+    fields:
+      uri: "{{ openwhisk_uri.stdout }}"
+      auth_secret: "{{ encoded_openwhisk_system_pass.stdout | b64decode }}"
+      action_name: "{{ action_id }}"
