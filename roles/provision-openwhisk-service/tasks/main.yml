@@ -1,0 +1,28 @@
+---
+##############################################################################
+## Creates an OpenShift OpenWhisk template file from a Jinja2 template
+##############################################################################
+- name: Create OpenWhisk Openshift template from template
+  template:
+    src: openwhisk-template.j2
+    dest: /tmp/openwhisk-template.yml
+
+##############################################################################
+## Provision OpenWhisk from yaml definition
+##############################################################################
+- name: Provision OpenWhisk from template
+  shell: oc process -f /tmp/openwhisk-template.yml -n {{ namespace }} | oc create -f - -n {{ namespace }}
+
+- name: Register OpenWhisk route
+  command: oc get route openwhisk -o jsonpath='{.spec.port.targetPort}://{.spec.host}' -n {{ namespace }}
+  register: openwhisk_uri
+
+- name: Register OpenWhisk Auth Secret
+  shell: oc get secret whisk.auth -o jsonpath='{.data.system}' -n {{ namespace }} | base64 --decode
+  register: openwhisk_system_pass
+
+- name: Encode required Bind data
+  asb_encode_binding:
+    fields:
+      uri: "{{ openwhisk_uri.stdout }}"
+      auth_secret: "{{ openwhisk_system_pass.stdout }}"
