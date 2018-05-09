@@ -8,6 +8,8 @@ async: optional
 tags:
   - FaaS
   - OpenWhisk
+  - mobile-service
+  - mobile-client-enabled
 metadata:
   displayName: Apache OpenWhisk
   console.openshift.io/iconClass: icon-apache
