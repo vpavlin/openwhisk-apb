@@ -37,7 +37,7 @@
     src: config.j2
     dest: /tmp/config.json
 
-- name: Create Fact List
+- name: Read JSON config
   set_fact:
     config_json: "{{ lookup('file','/tmp/config.json')|from_json }}"
 
