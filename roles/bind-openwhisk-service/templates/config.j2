@@ -1,0 +1,5 @@
+{
+  "appType": "{{ client_type | default('android') }}",
+  "action_name": "{{ action_id }}",
+  "encoded_secret": "{{ encoded_openwhisk_system_pass.stdout }}"
+}

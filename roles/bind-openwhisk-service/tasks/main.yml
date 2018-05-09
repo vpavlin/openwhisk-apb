@@ -32,6 +32,15 @@
 ##############################################################################
 ## Creates an OpenShift Secret template file from a Jinja2 template
 ##############################################################################
+- name: Create JSON Config from template
+  template:
+    src: config.j2
+    dest: /tmp/config.json
+
+- name: Create Fact List
+  set_fact:
+    config_json: "{{ lookup('file','/tmp/config.json')|from_json }}"
+
 - name: Create Openshift template from template
   template:
     src: bind-secret-template.j2
