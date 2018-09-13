@@ -11,7 +11,7 @@
 ## Provision OpenWhisk from yaml definition
 ##############################################################################
 - name: Provision OpenWhisk from template
-  shell: oc process -f /tmp/openwhisk-template.yml -n {{ namespace }} | oc create -f - -n {{ namespace }}
+  shell: oc process -f /tmp/openwhisk-template.yml -n {{ namespace }} | oc apply -f - -n {{ namespace }}
 
 
 - name: Encode required Bind data
