@@ -639,6 +639,9 @@ objects:
   spec:
     replicas: ${CONTROLLER_INSTANCES}
     serviceName: "controller"
+    selector:
+      matchLabels:
+        name: controller
     template:
       metadata:
         labels:
@@ -911,6 +914,9 @@ objects:
   spec:
     replicas: ${COUCHDB_INSTANCES}
     serviceName: couchdb-headless
+    selector:
+      matchLabels:
+        name: couchdb
     template:
       metadata:
         labels:
@@ -1041,6 +1047,9 @@ objects:
   spec:
     replicas: ${INVOKER_INSTANCES}
     serviceName: "invoker"
+    selector:
+      matchLabels:
+        name: invoker
     template:
       metadata:
         labels:
@@ -1417,6 +1426,9 @@ objects:
       name: nginx
   spec:
     replicas: 1
+    selector:
+      matchLabels:
+        name: nginx
     template:
       metadata:
         labels:
@@ -1477,6 +1489,9 @@ objects:
     name: strimzi-cluster-controller
   spec:
     replicas: 1
+    selector:
+      matchLabels:
+        name: strimzi-cluster-controller
     template:
       metadata:
         labels:
@@ -1537,6 +1552,9 @@ objects:
       name: alarmprovider
   spec:
     replicas: 1
+    selector:
+      matchLabels:
+        name: alarmprovider
     template:
       metadata:
         labels:
