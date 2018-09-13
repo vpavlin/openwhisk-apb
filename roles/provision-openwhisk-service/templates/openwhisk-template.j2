@@ -628,7 +628,7 @@ objects:
   data:
     controller_opts: "-Dwhisk.spi.LoadBalancerProvider=whisk.core.loadBalancer.ShardingContainerPoolBalancer"
     java_opts: "${CONTROLLER_JAVA_OPTS}"
-- apiVersion: apps/v1beta1
+- apiVersion: apps/v1
   kind: StatefulSet
   metadata:
     name: controller
@@ -902,7 +902,7 @@ objects:
     db_whisk_auths: test_subjects
     db_days_to_keep_logs: "${WHISK_DAYS_TO_KEEP_LOGS}"
     db_days_to_keep_activations: "${WHISK_DAYS_TO_KEEP_ACTIVATIONS}"
-- apiVersion: apps/v1beta1
+- apiVersion: apps/v1
   kind: StatefulSet
   metadata:
     name: couchdb
@@ -1032,7 +1032,7 @@ objects:
   subjects:
     - kind: ServiceAccount
       name: openwhisk
-- apiVersion: apps/v1beta1
+- apiVersion: apps/v1
   kind: StatefulSet
   metadata:
     name: invoker
@@ -1407,7 +1407,7 @@ objects:
                }
           }
       }
-- apiVersion: extensions/v1beta1
+- apiVersion: apps/v1
   kind: Deployment
   metadata:
     name: nginx
@@ -1471,7 +1471,7 @@ objects:
     db_username: "${COUCHDB_USER}"
     db_password: "${COUCHDB_PASSWORD}"
     db_secret: "${COUCHDB_SECRET}"
-- apiVersion: extensions/v1beta1
+- apiVersion: apps/v1
   kind: Deployment
   metadata:
     name: strimzi-cluster-controller
@@ -1529,7 +1529,7 @@ objects:
       export TOKEN="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
       export NAMESPACE="$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)"
       export ROUTER_HOST=$(curl -s --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt -H "Authorization: Bearer ${TOKEN}" "https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}/oapi/v1/namespaces/${NAMESPACE}/routes/openwhisk?pretty=true" | grep '"host":' | head -n 1 | awk -F '"' '{print $4}')
-- apiVersion: extensions/v1beta1
+- apiVersion: apps/v1
   kind: Deployment
   metadata:
     name: alarmprovider
@@ -1603,7 +1603,7 @@ objects:
           volumeMounts:
           - name: alarmprovider-config
             mountPath: "/alarmprovider_config"
-- apiVersion: batch/v2alpha1
+- apiVersion: batch/v1beta1
   kind: CronJob
   metadata:
     name: refresh-activations
@@ -1638,7 +1638,7 @@ objects:
               image: busybox:whisky
               command: ['sh', '-c', 'until wget -T 5 --spider http://controller:8080/ping; do echo waiting for controller; sleep 2; done;']
               restartPolicy: Never
-- apiVersion: batch/v2alpha1
+- apiVersion: batch/v1beta1
   kind: CronJob
   metadata:
     name: prune-activations
